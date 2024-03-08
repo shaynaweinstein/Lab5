@@ -1,24 +1,51 @@
 #include <stdio.h>
-#define months 12
+#define num_months 12
 
 void genSalesReport(float salesData[], int n);
 void genSalesSumm(float salesData[], int n);
 
 int main(){
-    float salesData[months];
+    float salesData[num_months];
     char filename[100];
+    // Get the filename from the user
+    printf("Enter the filename with monthly sales numbers: ");
+    scanf("%s", filename);
+
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("Error opening file. Make sure the file exists.\n");
+        return 1; // Return error code
+    }
+
+    // Read monthly sales numbers from the file
+    for (int i = 0; i < num_months; i++) {
+        if (fscanf(file, "%f", &salesData[i]) != 1) {
+            printf("Error reading sales data from the file.\n");
+            fclose(file);
+            return 1; // Return error code
+        }
+    }
+
+    fclose(file);
+    genSalesReport(salesData, num_months);
+    genSalesSumm(salesData, num_months);
+
+    return 0;
 }
 
 void genSalesReport(float salesData[], int n){
     printf("\nSales Report:\n");
-    printf("%-10s %-15s\n", "Month", "Sales");
+    printf("%-15s %-15s\n", "Month", "Sales");
+    const char *months[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
     for (int i = 0; i < n; i++) {
-        printf("%-10s $%-14.2f\n", (i + 1 == 10) ? "Month 10" : (i + 1 == 11) ? "Month 11" : (i + 1 == 12) ? "Month 12" : "Month", salesData[i]);
+        printf("%-15s $%-14.2f\n", months[i], salesData[i]);
     }
 }
 
 
 void genSalesSumm(float salesData[], int n){
+    const char *months[] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     printf("\nSales Summary Report:\n");
     
     // Calculate minimum, maximum, and average sales
@@ -50,16 +77,16 @@ void genSalesSumm(float salesData[], int n){
             movingAverage += salesData[j];
         }
         movingAverage /= 6;
-        printf("%-10s $%-14.2f\n", (i + 1 == 10) ? "Month 10" : (i + 1 == 11) ? "Month 11" : (i + 1 == 12) ? "Month 12" : "Month", movingAverage);
+        printf("%-15s $%-14.2f\n",months[i], movingAverage);
     }
 
     // Sort and display monthly sales from highest to lowest
     printf("\nMonthly Sales Report (Highest to Lowest):\n");
-    printf("%-10s %-15s\n", "Month", "Sales");
+    printf("%-15s %-15s\n", "Month", "Sales");
 
     // Create an array of indices and sort it based on sales data
-    int indices[months];
-    for (int i = 0; i < months; i++) {
+    int indices[num_months];
+    for (int i = 0; i < num_months; i++) {
         indices[i] = i;
     }
 
@@ -75,6 +102,6 @@ void genSalesSumm(float salesData[], int n){
 
     // Display sorted monthly sales
     for (int i = 0; i < n; i++) {
-        printf("%-10s $%-14.2f\n", (indices[i] + 1 == 10) ? "Month 10" : (indices[i] + 1 == 11) ? "Month 11" : (indices[i] + 1 == 12) ? "Month 12" : "Month", salesData[indices[i]]);
+        printf("%-15s $%-14.2f\n",months[i], salesData[indices[i]]);
     }
 }
