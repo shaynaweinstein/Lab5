@@ -77,7 +77,7 @@ void genSalesSumm(float salesData[], int n){
             movingAverage += salesData[j];
         }
         movingAverage /= 6;
-        printf("%-15s $%-14.2f\n",months[i], movingAverage);
+        printf("%-15s-%-15s $%-14.2f\n",months[i-5], months[i],movingAverage);
     }
 
     // Sort and display monthly sales from highest to lowest
