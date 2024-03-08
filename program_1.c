@@ -102,6 +102,6 @@ void genSalesSumm(float salesData[], int n){
 
     // Display sorted monthly sales
     for (int i = 0; i < n; i++) {
-        printf("%-15s $%-14.2f\n",months[i], salesData[indices[i]]);
+        printf("%-15s $%-14.2f\n",months[indices[i]], salesData[indices[i]]);
     }
 }
